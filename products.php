@@ -4,105 +4,173 @@ include 'db.php';
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shop - Jutta Sansaar</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jutta Sansaar - Shop Shoes</title>
+  <link rel="stylesheet" href="style.css"/>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f8f8f8;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f2f3f7;
     }
-    header {
-      background: #007bff;
+
+   header {
+      background: #222;
       color: white;
-      padding: 1rem;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
     }
     header h1 {
-      margin: 0;
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      user-select: none;
     }
-    header a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
+    nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
     }
+    nav a {
+      font-weight: 600;
+      color: #ddd;
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      transition: background 0.3s, color 0.3s;
+    }
+    nav a:hover, nav a.active {
+      background: #f39c12;
+      color: #222;
+    }
+
     .featured {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      padding: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      padding: 2.5rem;
     }
+
     .product {
       background: white;
-      border-radius: 10px;
-      padding: 1rem;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      text-align: center;
+      border-radius: 15px;
+      padding: 1.2rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      transition: transform 0.3s;
+      position: relative;
     }
+
+    .product:hover {
+      transform: scale(1.03);
+    }
+
     .product img {
-      max-width: 100%;
-      height: 200px;
+      width: 100%;
+      height: 220px;
       object-fit: contain;
+      border-radius: 10px;
       margin-bottom: 1rem;
     }
+
     .product h4 {
       margin: 0.5rem 0;
+      font-size: 1.2rem;
       color: #333;
     }
+
     .product p {
-      color: #28a745;
+      color: #2ecc71;
       font-weight: bold;
+      font-size: 1.1rem;
+      margin: 0.3rem 0 1rem;
     }
+
     .product input[type='number'] {
       width: 60px;
-      padding: 5px;
-      margin: 0.5rem 0;
+      padding: 6px;
+      margin-bottom: 0.7rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
+
     .product button {
-      background: #007bff;
+      background: #ff4500;
       color: white;
       border: none;
       padding: 0.5rem 1rem;
-      border-radius: 5px;
+      border-radius: 6px;
+      font-weight: bold;
       cursor: pointer;
+      transition: background 0.3s;
     }
+
     .product button:hover {
-      background: #0056b3;
+      background: #e03e00;
+    }
+
+    .badge {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: #ff4757;
+      color: #fff;
+      font-size: 0.8rem;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Shop Shoes</h1>
-    <a href="index.php">Home</a>
+    <header>
+    <div class="container">
+      <h1>👟 Jutta Sansaar</h1>
+      <nav id="nav-menu" aria-label="Primary">
+        <a href="index.php" class="nav-link ">Home</a>
+      <a href="products.php" class="nav-link active">Shop</a>
+      <a href="cart.php" class="nav-link">Cart</a>
+      <a href="login.php" class="nav-link">Login</a>
+      </nav>
+      <div class="menu-icon" id="menu-icon" aria-label="Toggle navigation menu" role="button" tabindex="0">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
   </header>
+
+
+
   <main class="featured">
     <?php
-    // Sample fallback products (if DB is empty)
+    // Fallback sample products
     $fallback = [
       ['name' => 'Black Sports Shoes', 'price' => 1999, 'image' => 'black_sports.jpg'],
       ['name' => 'Classic Leather Loafers', 'price' => 2499, 'image' => 'loafers.jpg'],
       ['name' => 'Casual White Sneakers', 'price' => 1799, 'image' => 'sneakers.jpg'],
-      ['name' => 'High-Top Basketball Shoes', 'price' => 2899, 'image' => 'basketball.jpg']
+      ['name' => 'High-Top Basketball Shoes', 'price' => 2899, 'image' => 'https://i5.walmartimages.com/seo/Kid-s-Basketball-Shoes-Boys-Sneakers-Girls-Trainers-Comfort-High-Top-Basketball-Shoes-for-Boys-Little-Kid-Big-Kid-White-Black_997ad829-1480-4baa-b184-98851ab7935a.4dc81d532dbb9b0b935c839a988458f8.jpeg']
     ];
 
     $sql = "SELECT * FROM products";
     $result = mysqli_query($conn, $sql);
-    
+
     if (mysqli_num_rows($result) === 0) {
-      // Insert fallback products if table is empty
       foreach ($fallback as $item) {
         $stmt = $conn->prepare("INSERT INTO products (name, price, image) VALUES (?, ?, ?)");
         $stmt->bind_param("sds", $item['name'], $item['price'], $item['image']);
         $stmt->execute();
       }
-      // Rerun query
-      $result = mysqli_query($conn, $sql);
+      $result = mysqli_query($conn, $sql); // re-fetch
     }
 
     while ($row = mysqli_fetch_assoc($result)) {
@@ -110,14 +178,20 @@ include 'db.php';
       $name = htmlspecialchars($row['name']);
       $price = number_format($row['price'], 2);
       $image = htmlspecialchars($row['image']);
+
+      // Check if image is URL or local
+      $imgSrc = filter_var($image, FILTER_VALIDATE_URL) ? $image : "images/{$image}";
+
       echo "<div class='product'>
-              <img src='images/{$image}' alt='{$name}'>
+              <span class='badge'>New</span>
+              <img src='{$imgSrc}' alt='{$name}'>
               <h4>{$name}</h4>
               <p>₹{$price}</p>
               <form method='POST' action='add_to_cart.php'>
                 <input type='hidden' name='product_id' value='{$id}'>
                 <input type='number' name='quantity' value='1' min='1'>
-                <button type='submit'>Add to Cart</button>
+                <br/>
+                <button type='submit'>🛒 Add to Cart</button>
               </form>
             </div>";
     }
