@@ -1,9 +1,9 @@
 <?php
 include 'db.php';
-
 include 'session.php';
+require_customer();
 
-$user_id = $_SESSION['user_id'] ?? 1; // Default demo user
+$user_id = $_SESSION['user_id'];
 
 // Handle AJAX POST requests for cart updates
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
@@ -302,8 +302,12 @@ input[type="number"] {
       <a href="products.php" class="nav-link" aria-current="page">Shop</a>
       <a href="cart.php" class="nav-link active">Cart</a>
       <a href="checkout.php" class="nav-link">Checkout</a>
-      <a href="login.php" class="nav-link">Login</a>
+      <!-- Show Login if not logged in, otherwise Logout -->
+    <?php if (!is_logged_in()): ?>
+      <a href="login.php">Login</a>
+    <?php else: ?>
       <a href="logout.php">Logout</a>
+    <?php endif; ?>
       </nav>
       <div class="menu-icon" id="menu-icon" aria-label="Toggle navigation menu" role="button" tabindex="0">
         <span></span>
@@ -403,26 +407,25 @@ input[type="number"] {
 document.addEventListener('DOMContentLoaded', () => {
     const cartBody = document.getElementById('cart-body');
 
-      function updateTotals() {
-      let subtotal = 0;
-      cartBody.querySelectorAll('tr').forEach(row => {
-          const qtyInput = row.querySelector('.quantity-input');
-          const priceText = row.querySelector('td[data-label="Price"]').textContent.replace(/[^\d.]/g, '');
-          const totalCell = row.querySelector('.item-total');
+    function updateTotals() {
+        let subtotal = 0;
+        cartBody.querySelectorAll('tr').forEach(row => {
+            const qtyInput = row.querySelector('.quantity-input');
+            const priceText = row.querySelector('td[data-label="Price"]').textContent.replace('रु','').trim();
+            const totalCell = row.querySelector('.item-total');
 
-          const qty = parseInt(qtyInput.value);
-          const price = parseFloat(priceText);
-          const total = qty * price;
-          totalCell.textContent = `रु${total.toFixed(2)}`;
-          subtotal += total;
-      });
+            const qty = parseInt(qtyInput.value);
+            const price = parseFloat(priceText);
+            const total = qty * price;
+            totalCell.textContent = `रु${total.toFixed(2)}`;
+            subtotal += total;
+        });
 
-      document.getElementById('subtotal').textContent = `रु${subtotal.toFixed(2)}`;
-      const tax = subtotal * 0.10;
-      document.getElementById('tax').textContent = `रु${tax.toFixed(2)}`;
-      document.getElementById('grand-total').textContent = `रु${(subtotal + tax).toFixed(2)}`;
-  }
-
+        document.getElementById('subtotal').textContent = `रु${subtotal.toFixed(2)}`;
+        const tax = subtotal * 0.10;
+        document.getElementById('tax').textContent = `रु${tax.toFixed(2)}`;
+        document.getElementById('grand-total').textContent = `रु${(subtotal + tax).toFixed(2)}`;
+    }
 
     function ajaxPost(data) {
         return fetch('cart.php', {

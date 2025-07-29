@@ -1,8 +1,6 @@
 <?php
 include 'db.php';
-
 include 'session.php';
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -219,7 +217,6 @@ include 'session.php';
 </head>
 <body>
     <header>
-
     <div class="container">
       <h1>👟 Jutta Sansaar</h1>
       <nav id="nav-menu" aria-label="Primary">
@@ -227,10 +224,13 @@ include 'session.php';
       <a href="products.php" class="nav-link active" aria-current="page">Shop</a>
       <a href="cart.php" class="nav-link">Cart</a>
       <a href="checkout.php" class="nav-link">Checkout</a>
-      <a href="login.php" class="nav-link">Login</a>
+      <!-- Show Login if not logged in, otherwise Logout -->
+    <?php if (!is_logged_in()): ?>
+      <a href="login.php">Login</a>
+    <?php else: ?>
       <a href="logout.php">Logout</a>
+    <?php endif; ?>
       </nav>
-
       <div class="menu-icon" id="menu-icon" aria-label="Toggle navigation menu" role="button" tabindex="0">
         <span></span>
         <span></span>
