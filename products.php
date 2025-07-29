@@ -1,5 +1,8 @@
 <?php
 include 'db.php';
+
+include 'session.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -216,6 +219,7 @@ include 'db.php';
 </head>
 <body>
     <header>
+
     <div class="container">
       <h1>👟 Jutta Sansaar</h1>
       <nav id="nav-menu" aria-label="Primary">
@@ -224,7 +228,9 @@ include 'db.php';
       <a href="cart.php" class="nav-link">Cart</a>
       <a href="checkout.php" class="nav-link">Checkout</a>
       <a href="login.php" class="nav-link">Login</a>
+      <a href="logout.php">Logout</a>
       </nav>
+
       <div class="menu-icon" id="menu-icon" aria-label="Toggle navigation menu" role="button" tabindex="0">
         <span></span>
         <span></span>

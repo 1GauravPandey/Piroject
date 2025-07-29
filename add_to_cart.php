@@ -1,6 +1,7 @@
 <?php
 include 'db.php';
-session_start();
+
+include 'session.php';
 
 // Simulated user login (replace with actual session logic)
 $user_id = $_SESSION['user_id'] ?? 1;
