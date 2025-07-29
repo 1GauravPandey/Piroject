@@ -1,9 +1,10 @@
 <?php
 include 'db.php';
-
 include 'session.php';
+require_customer();
 
 $message = '';
+$user_id = $_SESSION['user_id'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $name = $_POST['name'];
@@ -234,8 +235,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <a href="products.php" class="nav-link" aria-current="page">Shop</a>
       <a href="cart.php" class="nav-link">Cart</a>
       <a href="checkout.php" class="nav-link active">Checkout</a>
-      <a href="login.php" class="nav-link">Login</a>
+      <!-- Show Login if not logged in, otherwise Logout -->
+    <?php if (!is_logged_in()): ?>
+      <a href="login.php">Login</a>
+    <?php else: ?>
       <a href="logout.php">Logout</a>
+    <?php endif; ?>
       </nav>
     </div>
   </header>

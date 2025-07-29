@@ -1,10 +1,9 @@
-<?php
+<<?php
 include 'db.php';
-
 include 'session.php';
+require_customer();
 
-// Simulated user login (replace with actual session logic)
-$user_id = $_SESSION['user_id'] ?? 1;
+$user_id = $_SESSION['user_id'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $product_id = (int) $_POST['product_id'];
@@ -32,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: cart.php");
     exit;
 } else {
-    echo "Invalid request.";
+    echo "<p style='font-family: sans-serif; text-align: center; margin-top: 2rem;'>Invalid access. Please return to the <a href='products.php'>Products Page</a>.</p>";
 }
+
 ?>

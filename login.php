@@ -1,7 +1,6 @@
 <!-- login.php -->
 <?php
 include 'db.php';
-
 include 'session.php';
 
 $message = '';
@@ -15,25 +14,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $result = mysqli_query($conn, $sql);
   $user = mysqli_fetch_assoc($result);
 
-    if ($user && password_verify($password, $user['password'])) {
-    if (($role === 'admin' && $user['is_admin']) || ($role === 'customer' && !$user['is_admin'])) {
-      $_SESSION['user_id'] = $user['id'];
-      $_SESSION['is_admin'] = $user['is_admin'];
+  if ($user && password_verify($password, $user['password'])) {
+    // Role check (assuming users table has is_admin tinyint(1))
+    $is_admin_in_db = (int)$user['is_admin'] === 1;
 
-      // Redirect based on role
-      if ($user['is_admin']) {
-        header("Location: admin.php");
-      } else {
-        header("Location: index.php");
-      }
-      exit();
+    if (($role === 'admin' && $is_admin_in_db) || ($role === 'customer' && !$is_admin_in_db)) {
+      $_SESSION['user_id'] = $user['id'];
+      $_SESSION['is_admin'] = $is_admin_in_db;
+      $_SESSION['LAST_ACTIVITY'] = time();
+
+      // Respect original page the user wanted to visit
+      $redirect = $_SESSION['redirect_after_login'] ?? ($is_admin_in_db ? 'admin.php' : 'index1.php');
+      unset($_SESSION['redirect_after_login']);
+
+      header("Location: {$redirect}");
+      exit;
     } else {
       $message = 'Role mismatch. Please select the correct login role.';
     }
+  } else {
+    $message = 'Invalid email or password';
   }
-
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -245,7 +249,12 @@ main.page-content {
       <a href="products.php" class="nav-link" aria-current="page">Shop</a>
       <a href="cart.php" class="nav-link">Cart</a>
       <a href="checkout.php" class="nav-link">Checkout</a>
-      <a href="login.php" class="nav-link active">Login</a>
+      <!-- Show Login if not logged in, otherwise Logout -->
+    <?php if (!is_logged_in()): ?>
+      <a href="login.php">Login</a>
+    <?php else: ?>
+      <a href="logout.php">Logout</a>
+    <?php endif; ?>
       </nav>
       <div class="menu-icon" id="menu-icon" aria-label="Toggle navigation menu" role="button" tabindex="0">
         <span></span>
@@ -300,6 +309,39 @@ main.page-content {
         navMenu.classList.toggle('show');
       }
     });
+
     </script>
+    <?php if (isset($_GET['msg'])): ?>
+  <div id="popup-modal" style="
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;">
+    <div style="
+      background: #fff;
+      padding: 1.5rem 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      max-width: 90%;
+      width: 400px;
+      text-align: center;
+      font-family: 'Segoe UI', sans-serif;
+    ">
+      <h3 style="margin-bottom: 1rem;">🔒 Login Required</h3>
+      <p style="margin-bottom: 1.5rem;"><?= htmlspecialchars($_GET['msg']) ?></p>
+      <button onclick="document.getElementById('popup-modal').style.display='none'" style="
+        background: #222;
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 5px;
+        cursor: pointer;
+      ">OK</button>
+    </div>
+  </div>
+<?php endif; ?>
 </body>
 </html>
