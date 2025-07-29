@@ -1,85 +1,146 @@
 <?php
 include 'db.php';
-session_start();
+
+include 'session.php';
+
 if (!isset($_SESSION['user_id']) || !$_SESSION['is_admin']) {
   header("Location: login.php");
   exit();
 }
+
+$totalProducts = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM products"))['total'];
+$totalOrders = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM orders"))['total'];
+$totalUsers = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM users"))['total'];
+$totalMessages = 0; // Placeholder
+
+$recentOrders = mysqli_query($conn, "SELECT o.id, u.name AS customer, o.created_at AS date, p.price * o.quantity AS total, o.status FROM orders o LEFT JOIN users u ON o.user_id = u.id LEFT JOIN products p ON o.product_id = p.id ORDER BY o.created_at DESC LIMIT 5");
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Dashboard - Jutta Sansaar</title>
-  <!-- <link rel="stylesheet" href="styles.css"> -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shoe Store Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
-    body { font-family: Arial; background: #f4f4f4; padding: 0; margin: 0; }
-    header { background: #333; color: white; padding: 1rem; text-align: center; }
-    main { padding: 2rem; }
-    .card { background: white; padding: 1rem; margin-bottom: 2rem; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    h2 { margin-top: 0; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
-    .logout { float: right; color: white; text-decoration: underline; }
-    button { margin: 2px; }
+    body {
+      background-color: #f8f9fa;
+    }
+    .sidebar {
+      height: 100vh;
+      background-color: #343a40;
+      padding: 1rem;
+      color: #fff;
+    }
+    .sidebar a {
+      color: #fff;
+      text-decoration: none;
+      display: block;
+      padding: 0.5rem 0;
+    }
+    .sidebar a:hover {
+      background-color: #495057;
+      border-radius: 5px;
+    }
+    .dashboard-content {
+      padding: 2rem;
+    }
   </style>
 </head>
 <body>
-<header>
-  <h1>Admin Dashboard <a href="logout.php" class="logout">Logout</a></h1>
-</header>
+  <div class="container-fluid">
+    <div class="row">
 
-<main>
+      <nav class="col-md-2 d-none d-md-block sidebar">
+        <h4>Admin Panel</h4>
+        <a href="admin.php">Dashboard</a>
+        <a href="manage_products.php">Manage Products</a>
+        <a href="orders.php">Orders</a>
+        <a href="users.php">Users</a>
+        <a href="logout.php">Logout</a>
+      </nav>
 
-<!-- Product Adder -->
-<div class="card">
-  <h2>Add New Product</h2>
-  <form method="POST" action="add_product.php">
-    <input type="text" name="name" placeholder="Product Name" required><br><br>
-    <textarea name="description" placeholder="Description"></textarea><br><br>
-    <input type="number" step="0.01" name="price" placeholder="Price" required><br><br>
-    <input type="text" name="image_url" placeholder="Image URL"><br><br>
-    <button type="submit">Add Product</button>
-  </form>
-</div>
+      <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4 dashboard-content">
+        <h2>Dashboard Overview</h2>
+        <div class="row mt-4">
+          <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Total Products</h5>
+                <p class="card-text"><?php echo $totalProducts; ?></p>
+              </div>
+            </div>
+          </div>
 
-<!-- Orders Table -->
-<div class="card">
-  <h2>Customer Orders</h2>
-  <?php
-  $orders = mysqli_query($conn, "
-    SELECT orders.id, users.name AS customer, products.name AS product,
-           orders.quantity, orders.status
-    FROM orders
-    JOIN users ON orders.user_id = users.id
-    LEFT JOIN products ON orders.product_id = products.id
-    ORDER BY orders.created_at DESC
-  ");
+          <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Orders</h5>
+                <p class="card-text"><?php echo $totalOrders; ?></p>
+              </div>
+            </div>
+          </div>
 
-  echo "<table><tr><th>Order ID</th><th>Customer</th><th>Product</th><th>Qty</th><th>Status</th><th>Actions</th></tr>";
+          <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Users</h5>
+                <p class="card-text"><?php echo $totalUsers; ?></p>
+              </div>
+            </div>
+          </div>
 
-  while ($row = mysqli_fetch_assoc($orders)) {
-    $status = $row['status'];
-    echo "<tr>
-      <td>{$row['id']}</td>
-      <td>{$row['customer']}</td>
-      <td>" . ($row['product'] ?? 'N/A') . "</td>
-      <td>{$row['quantity']}</td>
-      <td>$status</td>
-      <td>
-        <form method='POST' action='update_order.php'>
-          <input type='hidden' name='order_id' value='{$row['id']}'>
-          <button name='action' value='accept' " . ($status == 'Accepted' ? 'disabled' : '') . ">Accept</button>
-          <button name='action' value='reject' " . ($status == 'Rejected' ? 'disabled' : '') . ">Reject</button>
-        </form>
-      </td>
-    </tr>";
-  }
+          <div class="col-md-3">
+            <div class="card text-white bg-danger mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Messages</h5>
+                <p class="card-text"><?php echo $totalMessages; ?></p>
+              </div>
+            </div>
+          </div>
+        </div>
 
-  echo "</table>";
-  ?>
-</div>
-
-</main>
+        <h3 class="mt-5">Recent Orders</h3>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Order ID</th> 
+              <th scope="col">Customer</th>
+              <th scope="col">Date</th>
+              <th scope="col">Total</th>
+              <th scope="col">Status</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php while($row = mysqli_fetch_assoc($recentOrders)): ?>
+              <tr>
+                <th scope="row">#<?php echo $row['id']; ?></th>
+                <td><?php echo htmlspecialchars($row['customer']); ?></td>
+                <td><?php echo $row['date']; ?></td>
+                <td>$<?php echo number_format($row['total'], 2); ?></td>
+                <td>
+                  <span class="badge bg-<?php
+                    echo $row['status'] === 'Accepted' ? 'success' :
+                         ($row['status'] === 'Pending' ? 'warning' : 'danger');
+                  ?>"><?php echo $row['status']; ?></span>
+                </td>
+                <td>
+                  <?php if ($row['status'] === 'Pending'): ?>
+                    <a href="update_order_status.php?id=<?php echo $row['id']; ?>&status=Accepted" class="btn btn-sm btn-success">Accept</a>
+                    <a href="update_order_status.php?id=<?php echo $row['id']; ?>&status=Rejected" class="btn btn-sm btn-danger">Reject</a>
+                  <?php else: ?>
+                    <span class="text-muted">No Action</span>
+                  <?php endif; ?>
+                </td>
+              </tr>
+            <?php endwhile; ?>
+          </tbody>
+        </table>
+      </main>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

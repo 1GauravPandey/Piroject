@@ -1,7 +1,9 @@
 <!-- login.php -->
 <?php
 include 'db.php';
-session_start();
+
+include 'session.php';
+
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -13,18 +15,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $result = mysqli_query($conn, $sql);
   $user = mysqli_fetch_assoc($result);
 
-  if ($user && password_verify($password, $user['password'])) {
+    if ($user && password_verify($password, $user['password'])) {
     if (($role === 'admin' && $user['is_admin']) || ($role === 'customer' && !$user['is_admin'])) {
       $_SESSION['user_id'] = $user['id'];
       $_SESSION['is_admin'] = $user['is_admin'];
-      header("Location: admin.php");
+
+      // Redirect based on role
+      if ($user['is_admin']) {
+        header("Location: admin.php");
+      } else {
+        header("Location: index.php");
+      }
       exit();
     } else {
       $message = 'Role mismatch. Please select the correct login role.';
     }
-  } else {
-    $message = 'Invalid email or password';
   }
+
 }
 ?>
 <!DOCTYPE html>

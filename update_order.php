@@ -1,6 +1,8 @@
 <?php
 include 'db.php';
-session_start();
+
+include 'session.php';
+
 if (!isset($_SESSION['user_id']) || !$_SESSION['is_admin']) {
   header("Location: login.php");
   exit();

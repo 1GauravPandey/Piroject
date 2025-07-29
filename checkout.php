@@ -1,6 +1,8 @@
 <?php
 include 'db.php';
-session_start();
+
+include 'session.php';
+
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -233,6 +235,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <a href="cart.php" class="nav-link">Cart</a>
       <a href="checkout.php" class="nav-link active">Checkout</a>
       <a href="login.php" class="nav-link">Login</a>
+      <a href="logout.php">Logout</a>
       </nav>
     </div>
   </header>
