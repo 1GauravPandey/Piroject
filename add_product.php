@@ -15,18 +15,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $desc = trim($_POST['description']);
   $price = floatval($_POST['price']);
   $img = trim($_POST['image']);
+  $category = trim($_POST['category']);
 
   // Basic validation
-  if ($name === '' || $desc === '' || $price <= 0 || $img === '') {
+  if ($name === '' || $desc === '' || $price <= 0 || $img === '' || $category === '') {
     $message = 'Please fill in all fields correctly.';
   } else {
     // Prevent SQL injection
     $name = mysqli_real_escape_string($conn, $name);
     $desc = mysqli_real_escape_string($conn, $desc);
     $img = mysqli_real_escape_string($conn, $img);
+    $category = mysqli_real_escape_string($conn, $category);
 
-    $sql = "INSERT INTO products (name, description, price, image)
-            VALUES ('$name', '$desc', $price, '$img')";
+    $sql = "INSERT INTO products (name, description, price, image, category)
+            VALUES ('$name', '$desc', $price, '$img', '$category')";
     
     if (mysqli_query($conn, $sql)) {
       header("Location: admin.php");  // Redirect after successful insert
@@ -38,23 +40,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Add Product - Admin | Jutta Sansaar</title>
-  <link rel="stylesheet" href="add_product.css">
+  <link rel="stylesheet" href="css/add_product.css">
 </head>
 <body>
   <div class="add-product-container">
     <h1>Add Product</h1>
 
-    <?php if ($message): ?>
-      <div class="error-message"><?= htmlspecialchars($message) ?></div>
-    <?php endif; ?>
+        <?php if ($message): ?>
+          <div class="error-message"><?= htmlspecialchars($message) ?></div>
+        <?php endif; ?>
 
-    <form method="POST" action="">
+      <form method="POST" action="">
       <label for="name">Name</label>
       <input type="text" id="name" name="name" required />
 
@@ -67,8 +70,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <label for="image">Image URL</label>
       <input type="text" id="image" name="image" required />
 
+      <label for="category">Category</label>
+      <select id="category" name="category" required>
+        <option value="" disabled selected>Select category</option>
+        <option value="Sports">Sports</option>
+        <option value="Casual">Casual</option>
+        <option value="Formal">Formal</option>
+        <option value="Kids">Kids</option>
+        <option value="Boots">Boots</option>
+        <option value="Sandals">Sandals</option>
+      </select>
+
       <button type="submit">Add Product</button>
     </form>
+
   </div>
 </body>
 </html>

@@ -13,7 +13,20 @@ $totalOrders = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total 
 $totalUsers = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM users"))['total'];
 $totalMessages = 0; // Placeholder
 
-$recentOrders = mysqli_query($conn, "SELECT o.id, u.name AS customer, o.created_at AS date, p.price * o.quantity AS total, o.status FROM orders o LEFT JOIN users u ON o.user_id = u.id LEFT JOIN products p ON o.product_id = p.id ORDER BY o.created_at DESC LIMIT 5");
+    $recentOrders = mysqli_query($conn, "
+        SELECT 
+            o.id, 
+            u.name AS customer, 
+            o.created_at AS date, 
+            o.total, 
+            o.status 
+        FROM orders o 
+        LEFT JOIN users u ON o.user_id = u.id 
+        ORDER BY o.created_at DESC 
+        LIMIT 5
+    ");
+
+
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +36,7 @@ $recentOrders = mysqli_query($conn, "SELECT o.id, u.name AS customer, o.created_
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shoe Store Admin Dashboard</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
   <div class="container-fluid">
@@ -90,30 +103,32 @@ $recentOrders = mysqli_query($conn, "SELECT o.id, u.name AS customer, o.created_
               <th scope="col">Action</th>
             </tr>
           </thead>
-          <tbody>
-            <?php while($row = mysqli_fetch_assoc($recentOrders)): ?>
-              <tr>
-                <th scope="row">#<?php echo $row['id']; ?></th>
-                <td><?php echo htmlspecialchars($row['customer']); ?></td>
-                <td><?php echo $row['date']; ?></td>
-                <td>$<?php echo number_format($row['total'], 2); ?></td>
-                <td>
-                  <span class="badge bg-<?php
-                    echo $row['status'] === 'Accepted' ? 'success' :
-                         ($row['status'] === 'Pending' ? 'warning' : 'danger');
-                  ?>"><?php echo $row['status']; ?></span>
-                </td>
-                <td>
-                  <?php if ($row['status'] === 'Pending'): ?>
-                    <a href="update_order_status.php?id=<?php echo $row['id']; ?>&status=Accepted" class="btn btn-sm btn-success">Accept</a>
-                    <a href="update_order_status.php?id=<?php echo $row['id']; ?>&status=Rejected" class="btn btn-sm btn-danger">Reject</a>
-                  <?php else: ?>
-                    <span class="text-muted">No Action</span>
-                  <?php endif; ?>
-                </td>
-              </tr>
-            <?php endwhile; ?>
-          </tbody>
+         <tbody>
+          <?php while($row = mysqli_fetch_assoc($recentOrders)): ?>
+            <tr>
+              <th scope="row">#<?php echo $row['id']; ?></th>
+              <td><?php echo htmlspecialchars($row['customer']); ?></td>
+              <td><?php echo $row['date']; ?></td>
+              <td>$<?php echo number_format($row['total'], 2); ?></td>
+              <td>
+                <span class="badge bg-<?php
+                  echo $row['status'] === 'Accepted' ? 'success' :
+                      ($row['status'] === 'Pending' ? 'warning' : 'danger');
+                ?>"><?php echo $row['status']; ?></span>
+              </td>
+              <td>
+                <?php if ($row['status'] === 'Pending'): ?>
+                  <a href="update_order_status.php?id=<?php echo $row['id']; ?>&status=Accepted" class="btn btn-sm btn-success">Accept</a>
+                  <a href="update_order_status.php?id=<?php echo $row['id']; ?>&status=Rejected" class="btn btn-sm btn-danger">Reject</a>
+                <?php else: ?>
+                  <span class="text-muted">No Action</span>
+                <?php endif; ?>
+              </td>
+            </tr>
+          <?php endwhile; ?>
+        </tbody>
+
+
         </table>
       </main>
     </div>

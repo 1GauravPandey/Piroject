@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Handle image
     if (!empty($_FILES['image']['name'])) {
         $image = basename($_FILES['image']['name']);
-        move_uploaded_file($_FILES['image']['tmp_name'], "uploads/" . $image);
+        move_uploaded_file($_FILES['image']['tmp_name'], "images/" . $image);
     } else {
         $image = $product['image'];
     }
@@ -65,8 +65,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="text" name="category" value="<?= htmlspecialchars($product['category']) ?>" class="form-control">
         </div>
         <div class="mb-3">
-            <label>Image</label><br>
-            <img src="uploads/<?= $product['image'] ?>" width="80" height="80"><br><br>
+            <label>Current Image</label><br>
+            <img src="images/<?= $product['image'] ?>" width="80" height="80"><br><br>
             <input type="file" name="image" class="form-control">
         </div>
         <button type="submit" class="btn btn-success">Update Product</button>

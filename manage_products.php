@@ -38,23 +38,25 @@ $products = mysqli_query($conn, "SELECT * FROM products");
       </tr>
     </thead>
     <tbody>
-      <?php while ($row = mysqli_fetch_assoc($products)) : ?>
+    <?php 
+      $counter = 1;
+      while ($row = mysqli_fetch_assoc($products)) : 
+    ?>
+    <tr>
+      <td><?php echo $counter++; ?></td> <!-- Ascending counter -->
+      <td><?php echo htmlspecialchars($row['name']); ?></td>
+      <td><?php echo number_format($row['price'], 2); ?></td>
+      <td><?php echo $row['stock']; ?></td>
+      <td><?php echo htmlspecialchars($row['category']); ?></td>
+      <td><img src="images/<?php echo $row['image']; ?>" width="60" height="60" alt=""></td>
+      <td>
+        <a href="edit_products.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
+        <a href="delete_products.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+      </td>
+    </tr>
+    <?php endwhile; ?>
+  </tbody>
 
-      <tr>
-        <td><?php echo $row['id']; ?></td>
-        <td><?php echo htmlspecialchars($row['name']); ?></td>
-        <td><?php echo number_format($row['price'], 2); ?></td>
-        <td><?php echo $row['stock']; ?></td>
-        <td><?php echo htmlspecialchars($row['category']); ?></td>
-        <td><img src="uploads/<?php echo $row['image']; ?>" width="60" height="60" alt=""></td>
-        <td>
-          <a href="edit_products.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
-          <a href="delete_products.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
-        </td>
-      </tr>
-
-      <?php endwhile; ?>
-    </tbody>
   </table>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

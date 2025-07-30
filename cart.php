@@ -44,7 +44,7 @@ $cart_items = $result->fetch_all(MYSQLI_ASSOC);
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Your Cart - Jutta Sansaar</title>
-<link rel="stylesheet" href="cart.css">
+<link rel="stylesheet" href="css/cart.css">
 
 </head>
 <body>
@@ -162,24 +162,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartBody = document.getElementById('cart-body');
 
     function updateTotals() {
-        let subtotal = 0;
-        cartBody.querySelectorAll('tr').forEach(row => {
-            const qtyInput = row.querySelector('.quantity-input');
-            const priceText = row.querySelector('td[data-label="Price"]').textContent.replace('रु','').trim();
-            const totalCell = row.querySelector('.item-total');
+      let subtotal = 0;
+      cartBody.querySelectorAll('tr').forEach(row => {
+          const qtyInput = row.querySelector('.quantity-input');
+          const priceText = row.querySelector('td[data-label="Price"]').textContent.replace(/[^\d.]/g, '');
+          const totalCell = row.querySelector('.item-total');
 
-            const qty = parseInt(qtyInput.value);
-            const price = parseFloat(priceText);
-            const total = qty * price;
-            totalCell.textContent = `रु${total.toFixed(2)}`;
-            subtotal += total;
-        });
+          const qty = parseInt(qtyInput.value);
+          const price = parseFloat(priceText);
+          const total = qty * price;
+          totalCell.textContent = `रु${total.toFixed(2)}`;
+          subtotal += total;
+      });
 
-        document.getElementById('subtotal').textContent = `रु${subtotal.toFixed(2)}`;
-        const tax = subtotal * 0.10;
-        document.getElementById('tax').textContent = `रु${tax.toFixed(2)}`;
-        document.getElementById('grand-total').textContent = `रु${(subtotal + tax).toFixed(2)}`;
-    }
+      document.getElementById('subtotal').textContent = `रु${subtotal.toFixed(2)}`;
+      const tax = subtotal * 0.10;
+      document.getElementById('tax').textContent = `रु${tax.toFixed(2)}`;
+      document.getElementById('grand-total').textContent = `रु${(subtotal + tax).toFixed(2)}`;
+  }
 
     function ajaxPost(data) {
         return fetch('cart.php', {
