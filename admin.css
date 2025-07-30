@@ -1,22 +1,67 @@
 body {
-      background-color: #f8f9fa;
-    }
-    .sidebar {
-      height: 100vh;
-      background-color: #343a40;
-      padding: 1rem;
-      color: #fff;
-    }
-    .sidebar a {
-      color: #fff;
-      text-decoration: none;
-      display: block;
-      padding: 0.5rem 0;
-    }
-    .sidebar a:hover {
-      background-color: #495057;
-      border-radius: 5px;
-    }
-    .dashboard-content {
-      padding: 2rem;
-    }
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.sidebar {
+  background-color: #343a40;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  color: #fff;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 220px;
+}
+
+.sidebar h4 {
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #ffc107;
+}
+
+.sidebar a {
+  display: block;
+  color: #ccc;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.25rem;
+  transition: 0.2s;
+}
+
+.sidebar a:hover,
+.sidebar a:focus {
+  background-color: #495057;
+  color: #fff;
+}
+
+.dashboard-content {
+  margin-left: 240px;
+  padding: 2rem;
+}
+
+h2, h3 {
+  color: #343a40;
+}
+
+.card {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border: none;
+  border-radius: 12px;
+}
+
+.table thead th {
+  background-color: #343a40;
+  color: #fff;
+}
+
+.table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.btn-sm {
+  margin-right: 5px;
+}
