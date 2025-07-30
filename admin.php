@@ -23,30 +23,7 @@ $recentOrders = mysqli_query($conn, "SELECT o.id, u.name AS customer, o.created_
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shoe Store Admin Dashboard</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <style>
-    body {
-      background-color: #f8f9fa;
-    }
-    .sidebar {
-      height: 100vh;
-      background-color: #343a40;
-      padding: 1rem;
-      color: #fff;
-    }
-    .sidebar a {
-      color: #fff;
-      text-decoration: none;
-      display: block;
-      padding: 0.5rem 0;
-    }
-    .sidebar a:hover {
-      background-color: #495057;
-      border-radius: 5px;
-    }
-    .dashboard-content {
-      padding: 2rem;
-    }
-  </style>
+  <link rel="stylesheet" href="admin.css">
 </head>
 <body>
   <div class="container-fluid">
