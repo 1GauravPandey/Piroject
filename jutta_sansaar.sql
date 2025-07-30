@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 21, 2025 at 05:28 PM
+-- Generation Time: Jul 30, 2025 at 05:07 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -39,11 +39,33 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`id`, `user_id`, `product_id`, `quantity`) VALUES
-(18, 1, 2, 1),
-(19, 1, 3, 1),
-(20, 1, 4, 1),
-(21, 1, 14, 1),
-(27, 3, 3, 1);
+(31, 6, 3, 1),
+(34, 8, 3, 2),
+(62, 7, 1, 7),
+(63, 7, 2, 5);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `categories`
+--
+
+CREATE TABLE `categories` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id`, `name`) VALUES
+(1, 'Sports'),
+(2, 'Casual'),
+(3, 'Formal'),
+(4, 'Kids'),
+(5, 'Boots'),
+(6, 'Sandals');
 
 -- --------------------------------------------------------
 
@@ -60,19 +82,36 @@ CREATE TABLE `orders` (
   `payment_method` varchar(50) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `product_id` int(11) DEFAULT NULL,
-  `quantity` int(11) DEFAULT NULL,
-  `status` enum('Pending','Accepted','Rejected') DEFAULT 'Pending'
+  `status` enum('Pending','Accepted','Rejected') DEFAULT 'Pending',
+  `total` decimal(10,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `user_id`, `name`, `phone`, `address`, `payment_method`, `created_at`, `product_id`, `quantity`, `status`) VALUES
-(2, 3, 'dfgdg1', '323424', 'gsgfg23', 'Cash on Delivery', '2025-07-21 03:43:11', NULL, NULL, 'Pending'),
-(3, 3, 'kjfnjernfv', '246r278r', 'mvjnsfjmnv', 'Khalti', '2025-07-21 04:03:34', NULL, NULL, 'Pending'),
-(4, 3, 'fvsdvsv', '33434', 'fbdx b', 'Khalti', '2025-07-21 15:13:38', NULL, NULL, 'Pending'),
-(5, 3, 'Xtreme Energy Drink Classic', '1234135', 'jhkhbhj66', 'Cash on Delivery', '2025-07-21 15:22:51', NULL, NULL, 'Pending');
+INSERT INTO `orders` (`id`, `user_id`, `name`, `phone`, `address`, `payment_method`, `created_at`, `product_id`, `status`, `total`) VALUES
+(16, 7, 'Yugesh Man Shrestha', '9823873851', 'Pashupati', 'Cash on Delivery', '2025-07-30 12:58:38', NULL, 'Accepted', 13200.00),
+(17, 7, 'Yugesh Man Shrestha', '9823873851', 'Pashupati', 'Cash on Delivery', '2025-07-30 14:48:48', NULL, 'Pending', 36300.00),
+(18, 7, 'Yugesh Man Shrestha', '9823873851', 'Pashupati', 'Cash on Delivery', '2025-07-30 14:48:53', NULL, 'Rejected', 36300.00),
+(19, 7, 'Yugesh Man Shrestha', '9823873851', 'Pashupati', 'Cash on Delivery', '2025-07-30 14:48:57', NULL, 'Rejected', 36300.00),
+(20, 7, 'Yugesh Man Shrestha', '9823873851', 'Pashupati', 'Cash on Delivery', '2025-07-30 14:49:06', NULL, 'Rejected', 23100.00),
+(21, 7, 'Yugesh Man Shrestha', '9823873851', 'Pashupati', 'Cash on Delivery', '2025-07-30 14:49:19', NULL, 'Rejected', 23100.00),
+(22, 7, 'Yugesh Man Shrestha', '9823873851', 'Pashupati', 'Cash on Delivery', '2025-07-30 14:49:23', NULL, 'Rejected', 23100.00),
+(23, 7, 'Yugesh Man Shrestha', '9823873851', 'Pashupati', 'Cash on Delivery', '2025-07-30 14:49:44', NULL, 'Accepted', 36844.50);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_items`
+--
+
+CREATE TABLE `order_items` (
+  `id` int(11) NOT NULL,
+  `order_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -95,21 +134,20 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `description`, `price`, `image`, `category`, `stock`) VALUES
-(1, 'Black Sports Shoes', NULL, 1999.00, 'black_sports.jpg', NULL, 0),
-(2, 'Classic Leather Loafers', NULL, 2499.00, 'loafers.jpg', NULL, 0),
-(3, 'Casual White Sneakers', NULL, 1799.00, 'sneakers.jpg', NULL, 0),
-(4, 'High-Top Basketball Shoes', NULL, 2899.00, 'basketball.jpg', NULL, 0),
-(5, 'Running Shoes - Red', NULL, 2099.00, 'running_red.jpg', NULL, 0),
-(6, 'Trail Hiking Boots', NULL, 3199.00, 'trail_boots.jpg', NULL, 0),
-(7, 'Slip-On Canvas Shoes', NULL, 1599.00, 'slipon_canvas.jpg', NULL, 0),
-(8, 'Formal Oxford Shoes', NULL, 2999.00, 'oxford.jpg', NULL, 0),
-(9, 'Kids Light-Up Shoes', NULL, 1899.00, 'kids_lightup.jpg', NULL, 0),
-(10, 'Chunky Dad Sneakers', NULL, 2699.00, 'dad_sneakers.jpg', NULL, 0),
-(11, 'Neon Green Trainers', NULL, 2199.00, 'neon_trainers.jpg', NULL, 0),
-(12, 'Limited Edition Gold High-Tops', NULL, 3499.00, 'gold_hightops.jpg', NULL, 0),
-(13, 'Winter Fur-lined Boots', NULL, 2799.00, 'fur_boots.jpg', NULL, 0),
-(14, 'Summer Flip Flops', NULL, 899.00, 'flipflops.jpg', NULL, 0),
-(15, 'Sneakers', 'Comfy shoes', 49.99, 'shoe.jpg', NULL, 0);
+(1, 'Black Sports Shoes', NULL, 3000.00, 'blue.jpg', 'Sports', 5),
+(2, 'Classic Leather Loafers', NULL, 2499.00, 'loafers.jpg', 'Boots', 2),
+(3, 'Casual White Sneakers', NULL, 1799.00, 'sneakers.jpg', 'Casual', 5),
+(4, 'High-Top Basketball Shoes', NULL, 2899.00, 'basketball.jpg', 'Sports', 11),
+(5, 'Running Shoes - Red', NULL, 2099.00, 'running_red.jpg', 'Sports', 4),
+(6, 'Trail Hiking Boots', NULL, 3199.00, 'trail_boots.jpg', 'Boots', 4),
+(7, 'Slip-On Canvas Shoes', NULL, 1599.00, 'slipon_canvas.jpg', 'Sandals', 5),
+(8, 'Formal Oxford Shoes', NULL, 2999.00, 'oxford.jpg', 'Formal', 7),
+(9, 'Kids Light-Up Shoes', NULL, 1899.00, 'kids_lightup.jpg', 'Kids', 9),
+(10, 'Chunky Dad Sneakers', NULL, 2699.00, 'dad_sneakers.jpg', 'Casual', 4),
+(11, 'Neon Green Trainers', NULL, 2199.00, 'neon_trainers.jpg', 'Kids', 9),
+(12, 'Limited Edition Gold High-Tops', NULL, 3499.00, 'gold_hightops.jpg', 'Formal', 12),
+(13, 'Winter Fur-lined Boots', NULL, 2799.00, 'fur_boots.jpg', 'Boots', 5),
+(14, 'Summer Flip Flops', NULL, 899.00, 'flipflops.jpg', 'Sandals', 7);
 
 -- --------------------------------------------------------
 
@@ -130,9 +168,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `is_admin`) VALUES
-(1, 'Gaurav Pandey', 'flashbarry74@gmail.com', '$2y$10$ANee1NTBlgIsBqvhOoEIUuO.fpqr/ZuSMW1Rzc56Js0ZBm0F8./76', 0),
-(3, 'G P', '12wildsoul@gmail.com', '$2y$10$xORzqq3qSJQWdsXT6yZfau.GL3QeOyzWHYEpEBDEqWMyxljKjBDXW', 1),
-(4, 'John Doe', 'john@example.com', '123456', 0);
+(4, 'John Doe', 'john@example.com', '123456', 0),
+(5, 'Yugesh Man Shrestha', 'yugeshmanshrestha@gmail.com', '$2y$10$SYo1XIYl.qWafzC8blwmKu4UHFdQkLce8daPtFMsHCzV94DkoDFoO', 0),
+(6, 'Dragon', 'Dragon@gmail.com', '$2y$10$6QFZs3pLilyD/n8NSzCkSeUsgDe23TiOlVHT7dQ2gTBSTusTv36Ty', 1),
+(7, 'John', 'john@gmail.com', '$2y$10$qoXoU.GXJKj.aXOE43ZBs.tINrtTU3RReJuN.6lDshaHw0TY2yQVO', 0),
+(8, 'Gaurav', 'Gaurav@gmail.com', '$2y$10$Tdz7XZKaU7fopn3a8c/tBuF.FFzFAsPEQTTYREKx2amQ7lHgoNjI6', 0);
 
 --
 -- Indexes for dumped tables
@@ -147,11 +187,25 @@ ALTER TABLE `cart`
   ADD KEY `product_id` (`product_id`);
 
 --
+-- Indexes for table `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_product` (`product_id`);
+
+--
+-- Indexes for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_id` (`order_id`),
+  ADD KEY `product_id` (`product_id`);
 
 --
 -- Indexes for table `products`
@@ -174,25 +228,37 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+
+--
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
+--
+-- AUTO_INCREMENT for table `order_items`
+--
+ALTER TABLE `order_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
@@ -210,6 +276,13 @@ ALTER TABLE `cart`
 --
 ALTER TABLE `orders`
   ADD CONSTRAINT `fk_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
