@@ -1,11 +1,15 @@
+/* ========== GLOBAL ========== */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f8f9fa;
+  background: linear-gradient(135deg, #e0f7fa, #fce4ec);
   color: #333;
+  min-height: 100vh;
+  margin: 0;
 }
 
+/* ========== SIDEBAR ========== */
 .sidebar {
-  background-color: #343a40;
+  background: linear-gradient(180deg, #343a40, #212529);
   min-height: 100vh;
   padding: 2rem 1rem;
   color: #fff;
@@ -13,55 +17,99 @@ body {
   left: 0;
   top: 0;
   width: 220px;
+  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar h4 {
-  font-size: 1.4rem;
-  margin-bottom: 1.5rem;
+  font-size: 1.6rem;
+  margin-bottom: 2rem;
   text-align: center;
   color: #ffc107;
+  font-weight: bold;
 }
 
 .sidebar a {
   display: block;
   color: #ccc;
   text-decoration: none;
-  padding: 0.5rem 0.75rem;
+  padding: 0.6rem 1rem;
   margin-bottom: 0.5rem;
-  border-radius: 0.25rem;
-  transition: 0.2s;
+  border-radius: 6px;
+  font-weight: 500;
+  border-left: 4px solid transparent;
+  transition: all 0.3s ease;
 }
 
 .sidebar a:hover,
 .sidebar a:focus {
   background-color: #495057;
   color: #fff;
+  border-left: 4px solid #ffc107;
+  padding-left: 1.2rem;
 }
 
+/* ========== DASHBOARD CONTENT ========== */
 .dashboard-content {
   margin-left: 240px;
   padding: 2rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  margin-top: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
 }
 
+/* ========== HEADINGS ========== */
 h2, h3 {
   color: #343a40;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
 }
 
+/* ========== CARD STYLING ========== */
 .card {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   border: none;
-  border-radius: 12px;
+  border-radius: 16px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.card-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* ========== TABLE STYLING ========== */
 .table thead th {
   background-color: #343a40;
   color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .table tbody tr:hover {
-  background-color: #f1f1f1;
+  background-color: #e3f2fd;
 }
 
+/* ========== BUTTONS ========== */
 .btn-sm {
   margin-right: 5px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-sm:hover {
+  opacity: 0.9;
 }

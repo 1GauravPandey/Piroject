@@ -1,193 +1,237 @@
+/* Reset some default browser styling and apply global font */
 * {
-      box-sizing: border-box;
-      margin: 0; padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      /* background-color: #f2f3f7; */
-      background: url('https://cloudfront-us-east-2.images.arcpublishing.com/reuters/NKYZ3DCPBRMHVL3LP65XEHONXA.jpg') no-repeat center center/cover ;
-      /* background: #fff; */
-      color: #222;
-      line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+  box-sizing: border-box; /* Ensures padding and border are included in total width/height */
+  margin: 0; 
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Sets default font */
+}
 
-   header {
-      background: #222;
-      color: white;
-      padding: 1rem 2rem;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-    }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    header h1 {
-      font-size: 1.8rem;
-      letter-spacing: 2px;
-      user-select: none;
-    }
-    nav {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-    }
-    nav a {
-      font-weight: 600;
-      color: #ddd;
-      padding: 0.5rem 0.75rem;
-      border-radius: 4px;
-      transition: background 0.3s, color 0.3s;
-    }
-    nav a:hover, nav a.active {
-      background: #f39c12;
-      color: #222;
-    }
+/* Remove underline and inherit color from parent for all links */
+a {
+  text-decoration: none;
+  color: inherit;
+}
 
-    /* FOOTER */
-    footer {
-      background: #222;
-      color: white;
-      text-align: center;
-      padding: 1.5rem 2rem;
-      margin-bottom: auto;
-      font-size: 0.9rem;
-      letter-spacing: 1px;
-      user-select: none;
-    }
-    
-    main.featured {
-      flex-grow: 1;
-      display: grid;
-      grid-template-columns: no-repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      padding: 2.5rem;
-      align-content: start; /* ✅ This keeps cards at natural height */
-    }
-    .featured {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      padding: 2.5rem;
-    }
-       /* Hamburger menu */
-    #menu-toggle {
-      display: none;
-    }
-    .menu-icon {
-      display: none;
-      cursor: pointer;
-      flex-direction: column;
-      gap: 5px;
-      width: 25px;
-    }
-    .menu-icon span {
-      display: block;
-      height: 3px;
-      background: white;
-      border-radius: 3px;
-      transition: 0.3s;
-    }
+/* Style for the body element */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  
+  background: url('https://cloudfront-us-east-2.images.arcpublishing.com/reuters/NKYZ3DCPBRMHVL3LP65XEHONXA.jpg') no-repeat center center/cover; /* Full background image */
+  
+  color: #222; 
+  line-height: 1.6; 
+  min-height: 100vh; 
+  display: flex;
+  flex-direction: column; 
+}
 
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
-      nav {
-        gap: 1rem;
-      }
-    }
-    @media (max-width: 600px) {
-      header {
-        padding: 1rem;
-      }
-      nav {
-        display: none;
-        flex-direction: column;
-        background: #222;
-        position: absolute;
-        top: 100%;
-        right: 0;
-        width: 200px;
-        border-radius: 0 0 0 10px;
-      }
-      nav.show {
-        display: flex;
-      }
-      .menu-icon {
-        display: flex;
-      }
-    }
-    .checkout-container {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 3rem 1rem;
-    }
+/* Header section (navigation bar) */
+header {
+  background: #222; 
+  color: white;
+  padding: 1rem 2rem;
+  position: sticky; 
+  top: 0;
+  z-index: 1000; 
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4); 
+}
 
-    .checkout-form {
-      background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      max-width: 500px;
-      width: 100%;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
-    }
+/* Container inside header for content alignment */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-    .checkout-form h2 {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
+/* Logo or site title */
+header h1 {
+  font-size: 1.8rem;
+  letter-spacing: 2px;
+  user-select: none; /* Prevents text from being selected */
+}
 
-    .form-group {
-      margin-bottom: 1.2rem;
-    }
+/* Navigation bar container */
+nav {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
 
-    .form-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      color: #333;
-    }
+/* Navigation links */
+nav a {
+  font-weight: 600;
+  color: #ddd;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  transition: background 0.3s, color 0.3s; 
+}
 
-    .form-group input, .form-group textarea, .form-group select {
-      width: 100%;
-      padding: 0.8rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-    }
+/* Hover and active link style */
+nav a:hover, nav a.active {
+  background: #f39c12; 
+  color: #222; 
+}
 
-    .btn {
-      width: 100%;
-      background-color: #ff7e5f;
-      color: white;
-      border: none;
-      padding: 0.9rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
+/* Footer section */
+footer {
+  background: #222;
+  color: white;
+  text-align: center;
+  padding: 1.5rem 2rem;
+  margin-bottom: auto;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  user-select: none;
+}
 
-    .btn:hover {
-      background-color: #eb6a48;
-    }
+/* Featured section in main content */
+main.featured {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: no-repeat(auto-fit, minmax(280px, 1fr)); /* Typo: 'no-repeat' likely not needed */
+  gap: 2rem;
+  padding: 2.5rem;
+  align-content: start; 
+}
 
-    .message {
-      text-align: center;
-      color: green;
-      margin-bottom: 1rem;
-    }
+/* Grid layout for featured content */
+.featured {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 2.5rem;
+}
+
+/* Hidden checkbox for mobile hamburger toggle */
+#menu-toggle {
+  display: none;
+}
+
+/* Hamburger icon container (mobile) */
+.menu-icon {
+  display: none;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 5px;
+  width: 25px;
+}
+
+/* Hamburger icon lines */
+.menu-icon span {
+  display: block;
+  height: 3px;
+  background: white;
+  border-radius: 3px;
+  transition: 0.3s;
+}
+
+/* Responsive layout adjustments for medium screens */
+@media (max-width: 900px) {
+  nav {
+    gap: 1rem;
+  }
+}
+
+/* Responsive layout adjustments for small screens */
+@media (max-width: 600px) {
+  header {
+    padding: 1rem;
+  }
+
+  /* Hide default nav and show as dropdown on toggle */
+  nav {
+    display: none;
+    flex-direction: column;
+    background: #222;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 200px;
+    border-radius: 0 0 0 10px;
+  }
+
+  nav.show {
+    display: flex;
+  }
+
+  /* Show hamburger icon */
+  .menu-icon {
+    display: flex;
+  }
+}
+
+/* Container for checkout page */
+.checkout-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 1rem;
+}
+
+/* Checkout form box */
+.checkout-form {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2); 
+}
+
+/* Checkout form heading */
+.checkout-form h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Wrapper for each form field */
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+/* Label above each input field */
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+/* Input, textarea and select styling */
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+/* Button styling */
+.btn {
+  width: 100%;
+  background-color: #ff7e5f; /* Coral */
+  color: white;
+  border: none;
+  padding: 0.9rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Hover effect for button */
+.btn:hover {
+  background-color: #eb6a48;
+}
+
+/* Message display (e.g. order success) */
+.message {
+  text-align: center;
+  color: green;
+  margin-bottom: 1rem;
+}

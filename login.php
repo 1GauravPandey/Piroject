@@ -1,38 +1,49 @@
 <!-- login.php -->
 <?php
+// Include database connection and session management scripts
 include 'db.php';
 include 'session.php';
 
+// Initialize message variable to hold error messages
 $message = '';
 
+// Check if the form was submitted via POST method
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  // Retrieve submitted form data
   $email = $_POST['email'];
   $password = $_POST['password'];
   $role = $_POST['role'];
 
+  // Query to fetch user record by email
   $sql = "SELECT * FROM users WHERE email = '$email'";
   $result = mysqli_query($conn, $sql);
   $user = mysqli_fetch_assoc($result);
 
+  // Verify user exists and password matches the hashed password stored in DB
   if ($user && password_verify($password, $user['password'])) {
-    // Role check (assuming users table has is_admin tinyint(1))
+    // Check user's admin status stored in the database (assuming tinyint(1))
     $is_admin_in_db = (int)$user['is_admin'] === 1;
 
+    // Validate if the selected role matches user's actual role
     if (($role === 'admin' && $is_admin_in_db) || ($role === 'customer' && !$is_admin_in_db)) {
+      // Set session variables for user id, admin status, and last activity time
       $_SESSION['user_id'] = $user['id'];
       $_SESSION['is_admin'] = $is_admin_in_db;
       $_SESSION['LAST_ACTIVITY'] = time();
 
-      // Respect original page the user wanted to visit
+      // Redirect user to original page they wanted to visit or default pages based on role
       $redirect = $_SESSION['redirect_after_login'] ?? ($is_admin_in_db ? 'admin.php' : 'index.php');
-      unset($_SESSION['redirect_after_login']);
+      unset($_SESSION['redirect_after_login']); // Clear redirect session variable
 
+      // Redirect and exit script
       header("Location: {$redirect}");
       exit;
     } else {
+      // Role mismatch error message
       $message = 'Role mismatch. Please select the correct login role.';
     }
   } else {
+    // Invalid credentials error message
     $message = 'Invalid email or password';
   }
 }
@@ -41,27 +52,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Metadata and styles -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - Jutta Sansaar</title>
-  <link rel="stylesheet" href="css/login.css">
+  <link rel="stylesheet" href="login.css">
 </head>
 <body>
   <header>
     <div class="container">
-      <h1>👟 Jutta Sansaar</h1>
+      <!-- Website title linking to homepage -->
+      <h1><a href="index.php" style="text-decoration: none; color: inherit;">👟 Jutta Sansaar</a></h1>
+      
+      <!-- Navigation menu -->
       <nav id="nav-menu" aria-label="Primary">
-      <a href="index.php" class="nav-link ">Home</a>
-      <a href="products.php" class="nav-link" aria-current="page">Shop</a>
-      <a href="cart.php" class="nav-link">Cart</a>
-      <a href="checkout.php" class="nav-link">Checkout</a>
-      <!-- Show Login if not logged in, otherwise Logout -->
-    <?php if (!is_logged_in()): ?>
-      <a href="login.php">Login</a>
-    <?php else: ?>
-      <a href="logout.php">Logout</a>
-    <?php endif; ?>
+        <a href="index.php" class="nav-link">Home</a>
+        <a href="products.php" class="nav-link" aria-current="page">Shop</a>
+        <a href="cart.php" class="nav-link">Cart</a>
+        <a href="checkout.php" class="nav-link">Checkout</a>
+
+        <!-- Show Login link if user not logged in, otherwise Logout -->
+        <?php if (!is_logged_in()): ?>
+          <a href="login.php" class="nav-link active">Login</a>
+        <?php else: ?>
+          <a href="logout.php" class="nav-link">Logout</a>
+        <?php endif; ?>
       </nav>
+
+      <!-- Hamburger menu icon for mobile navigation -->
       <div class="menu-icon" id="menu-icon" aria-label="Toggle navigation menu" role="button" tabindex="0">
         <span></span>
         <span></span>
@@ -71,53 +89,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </header>
 
   <main class="page-content">
-  <div class="login-container">
-    <h2>Login to Jutta Sansaar</h2>
-    <?php if ($message): ?>
-      <p class="error"><?= $message ?></p>
-    <?php endif; ?>
-    <form method="POST">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" name="email" id="email" required>
+    <div class="login-container">
+      <h2>Login to Jutta Sansaar</h2>
+
+      <!-- Display error message if any -->
+      <?php if ($message): ?>
+        <p class="error"><?= $message ?></p>
+      <?php endif; ?>
+
+      <!-- Login form -->
+      <form method="POST">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" required>
+        </div>
+
+        <div class="form-group">
+          <label for="role">Login as</label>
+          <select name="role" id="role" required>
+            <option value="customer">Customer</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn">Login</button>
+      </form>
+
+      <!-- Link to registration page -->
+      <div class="signup-link">
+        <p>Don't have an account? <a href="register.php">Sign up</a></p>
       </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" required>
-      </div>
-      <div class="form-group">
-        <label for="role">Login as</label>
-        <select name="role" id="role" required>
-          <option value="customer">Customer</option>
-          <option value="admin">Admin</option>
-        </select>
-      </div>
-      <button type="submit" class="btn">Login</button>
-    </form>
-    <div class="signup-link">
-      <p>Don't have an account? <a href="register.php">Sign up</a></p>
     </div>
-  </div>
   </main>
+
   <footer>
     <p>&copy; 2025 Jutta Sansaar. All rights reserved.</p>
-    </footer>
+  </footer>
 
-    <script>
-    // Hamburger menu toggle
+  <script>
+    // Hamburger menu toggle functionality
     const menuIcon = document.getElementById('menu-icon');
     const navMenu = document.getElementById('nav-menu');
+
+    // Toggle navigation menu on click
     menuIcon.addEventListener('click', () => {
       navMenu.classList.toggle('show');
     });
+
+    // Toggle navigation menu on keyboard (Enter or Space) for accessibility
     menuIcon.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         navMenu.classList.toggle('show');
       }
     });
+  </script>
 
-    </script>
-    <?php if (isset($_GET['msg'])): ?>
+  <!-- Popup modal if a message is passed via GET (e.g., login required message) -->
+  <?php if (isset($_GET['msg'])): ?>
   <div id="popup-modal" style="
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -148,6 +181,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       ">OK</button>
     </div>
   </div>
-<?php endif; ?>
+  <?php endif; ?>
 </body>
 </html>

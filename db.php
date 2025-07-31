@@ -2,7 +2,7 @@
 $host = 'localhost';
 $user = 'root';
 $pass = ''; // Change this only if your MySQL has a password
-$db = 'jutta_sansaar';
+$db = 'jutta_sansaar1';
 
 // Establish connection
 $conn = mysqli_connect($host, $user, $pass, $db);
